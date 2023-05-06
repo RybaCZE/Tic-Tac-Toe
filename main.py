@@ -18,19 +18,20 @@ def center(win):#makes the window allways be in center not in corner(usefull for
     y = root.winfo_screenheight() // 2 - win_height // 2
     root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
     root.deiconify()
-
+    return
 def konec():
     quit()
 
 def clearwin():#makes your screen clear(woooow)
     for widget in root.winfo_children():
         widget.destroy()
+    return
 
 class SquareButton(tk.Button):#buttons goo squareee!!!!(used to make buttons with text square)
     def __init__(self, master=None, size=None, **kwargs):
         self.img = tk.PhotoImage()
         tk.Button.__init__(self, master, image=self.img, compound=tk.CENTER, width=size, height=size, **kwargs)
-
+        return
 def disable_play_field_buttons():#used to disable all buttons after someone won so you cant change any buttons 
     btn_1_1['state'] = tk.DISABLED
     btn_1_2['state'] = tk.DISABLED
@@ -41,6 +42,7 @@ def disable_play_field_buttons():#used to disable all buttons after someone won 
     btn_3_1['state'] = tk.DISABLED
     btn_3_2['state'] = tk.DISABLED
     btn_3_3['state'] = tk.DISABLED
+    return
 
 def replace_button_with_image_continue(button,one_or_null):#used to replace images when you pause and come back. replaces 1 or 0 with "x" or "o"
     match one_or_null:
@@ -53,6 +55,7 @@ def replace_button_with_image_continue(button,one_or_null):#used to replace imag
     image = ImageTk.PhotoImage(image)
     button.configure(image=image, bg='white')
     button.image = image
+    return
 
 def replace_button_with_image(button):#used to play the game cuz it changes the blank images buttons to "X" or "O"
     y_res1 = y_res -20
@@ -66,13 +69,14 @@ def replace_button_with_image(button):#used to play the game cuz it changes the 
     image = ImageTk.PhotoImage(image)
     button.configure(image=image, bg='white')
     button.image = image
+    return
 
 def menu_button_fun():#creates pause menu in top left of the window and creates play field
     clearwin()
     menu_button = tk.Button(root,bg='black', font=main_font,fg='white', text="pause", command=menu)
     menu_button.place(x= 5,y=5)
     play_field(y_res)#do not delete parameter it wont work without it(idk why)
-
+    return
 def menu():#this will show up when you click the pause button
     global menu_button
     position = y_res//2
@@ -87,6 +91,7 @@ def menu():#this will show up when you click the pause button
     back['font'] = main_font
     main_menu['font'] = main_font
     end['font'] = main_font
+    return
 
 def play_as():# this will create a selection menu. play as "X" or "O" 
     clearwin()
@@ -117,14 +122,19 @@ def play_as():# this will create a selection menu. play as "X" or "O"
         player = 0
         turn = 0
         opponent = 1
+        player_1 = "o"
+        player_2 = "x"
         load_difficulty_gamemod()
-    def player_is_cross(player_fun):
+    def player_is_cross():
         global player, turn, opponent
         player =1
         turn = 1
         opponent = 0
+        player_1 = "x"
+        player_2 = "o"
         load_difficulty_gamemod()
     def load_difficulty_gamemod():
+        chceck_progress()
         match difficulty:
             case 0:
                 menu_button_fun()
@@ -134,22 +144,23 @@ def play_as():# this will create a selection menu. play as "X" or "O"
                 menu_button_fun()
             case 3:
                 menu_button_fun()
-
+    return
 def continue_game():#this will recreate images in a playfield from matrix 
     button_count = 0
     for o in range(3):
             for k in range(3):
                 button_count += 1
-                if board[o][k] == 1:  
+                if game_board[o][k] == 1:  
                     witch_players_turn = 1
                     unpause_buttons_after_pause(button_count, witch_players_turn)
-                elif board[o][k] ==0:
+                elif game_board[o][k] ==0:
                     witch_players_turn = 0
                     unpause_buttons_after_pause(button_count, witch_players_turn)
                 else:
                     continue
+    return
 
-def unpause_buttons_after_pause(button_count, player):#this will continue the game when you unpause. when the matrix(board) has 1 or 0 it will get the position(counting from 
+def unpause_buttons_after_pause(button_count, player):#this will continue the game when you unpause. when the matrix(game_board) has 1 or 0 it will get the position(counting from 
     #top left). 
     #1input is witch button and what player button count is in continue_game 
     match button_count:
@@ -180,6 +191,7 @@ def unpause_buttons_after_pause(button_count, player):#this will continue the ga
         case 9:
             replace_button_with_image_continue(btn_3_3, player)
             btn_3_3['state'] = tk.DISABLED
+    return
 
 def back_fun():#used in witch difficulty to put player after pause #FIX IT OR REMOVE IT OR IMPLEMENT IT BETTER
     global game_progress
@@ -193,7 +205,8 @@ def back_fun():#used in witch difficulty to put player after pause #FIX IT OR RE
             stredni()
         case 3:
             tezka()
-        
+    return
+
 def main_menu_fun():#creates the main menu screen(play, settings, quit)
     clearwin()
     position = y_res//2
@@ -205,7 +218,8 @@ def main_menu_fun():#creates the main menu screen(play, settings, quit)
     main_play.place(x=position,y= position-spacing-spacing)#on top
     settings.place(x=position,y= position-spacing)#lower
     end.place(x=position,y= position)#lowest
-    
+    return
+
 def nastaveni():#settings(resolution, theme???)
     clearwin()
     if full_scr == False:
@@ -254,6 +268,7 @@ def nastaveni():#settings(resolution, theme???)
         font_size = y_res//60
         main_font = font.Font(family='DejaVu Sans', size=font_size )
     clicked.trace("w", resolution_change)
+    return
 
 def play():#play menu screen (diffisulty selector)
     global diff_easy, diff_medium, diff_hard, game_progress
@@ -272,29 +287,34 @@ def play():#play menu screen (diffisulty selector)
     diff_easy.place(x=position,y= position - spacing- spacing)
     diff_medium.place(x=position,y= position- spacing)
     diff_hard.place(x=position,y=position)
+    return
 
 def play_w_friend():
-    global diff_easy, diff_medium, diff_hard, menu_button, difficulty
+    global diff_easy, diff_medium, diff_hard,  difficulty
     difficulty = 0
     play_as()
+    return
 
 def lehka():#ez difficculty
-    global diff_easy, diff_medium, diff_hard, menu_button, diff
+    global diff_easy, diff_medium, diff_hard, difficulty
     difficulty = 1
     play_as()
+    return
 
 def stredni():#medium difficulty
-    global diff_easy, diff_medium, diff_hard, menu_button, diff
+    global diff_easy, diff_medium, diff_hard, difficulty
     difficulty = 2
     play_as()
+    return
 
 def tezka():#hard difficulty
-    global diff_easy, diff_medium, diff_hard, menu_button, diff
+    global diff_easy, diff_medium, diff_hard, difficulty
     difficulty = 3
     play_as()
+    return
 
 def play_hard():
-    num = minimax.idk_yet(board, player, opponent)
+    num = minimax.idk_yet(game_board, player, opponent)
     match num:
         case 1:
             btn_1_1.invoke()
@@ -314,69 +334,71 @@ def play_hard():
             btn_3_2.invoke()
         case 9:
             btn_3_3.invoke()
+    return
 
-
-def check_win(board):#MAKE IT BETTER FIX IT!!!!! checks if player won or not
+def check_win(game_board):#MAKE IT BETTER FIX IT!!!!! checks if player won or not
     # line check
     for row in range(3):
-        if board[row][0] == board[row][1] == board[row][2] is not None:
-            if board[row][0] == board[row][1] == board[row][2]:
+        if game_board[row][0] == game_board[row][1] == game_board[row][2] is not None:
+            if game_board[row][0] == game_board[row][1] == game_board[row][2]:
                 disable_play_field_buttons()
                 return True
     # col check
     for col in range(3):
-        if board[0][col] == board[1][col] == board[2][col] is not None:
-            if board[0][col] == board[1][col] == board[2][col]:
+        if game_board[0][col] == game_board[1][col] == game_board[2][col] is not None:
+            if game_board[0][col] == game_board[1][col] == game_board[2][col]:
                 disable_play_field_buttons()
                 return True
     # diagonal
-    if board[0][0] == board[1][1] == board[2][2] is not None:
-        if board[0][0] == board[1][1] == board[2][2]:
+    if game_board[0][0] == game_board[1][1] == game_board[2][2] is not None:
+        if game_board[0][0] == game_board[1][1] == game_board[2][2]:
             disable_play_field_buttons()
             return True
-    if board[0][2] == board[1][1] == board[2][0] is not None:
-        if board[0][2] == board[1][1] == board[2][0]:
+    if game_board[0][2] == game_board[1][1] == game_board[2][0] is not None:
+        if game_board[0][2] == game_board[1][1] == game_board[2][0]:
             disable_play_field_buttons()
             return True
     # draw
-    if all(board[row][col] is not None for row in range(3) for col in range(3)):
+    if all(game_board[row][col] is not None for row in range(3) for col in range(3)):
         return "Draw"
     #if no one made draw or won
     return False
 
-def winner(board):#winner screen used to create menu after someone wins. (player) won, play again and main menu
-    result = check_win(board)
+def winner(game_board):#winner screen used to create menu after someone wins. (player) won, play again and main menu
+    result = check_win(game_board)
     position = y_res//2
     spacing= 10+(position//10)
     if result is True:
         if player_turn ==1:
-            player_win = "crosses"
+            player_win = "Crosses"
         elif player_turn == 0:
-            player_win= "circles"
+            player_win= "Circles"
         winner = tk.StringVar(value=f"{player_win} won")
-        label = tk.Label(root, textvariable=winner, font=("DejaVu Sans", 20, "normal"))
-        label.place(x=position,y=position-spacing-spacing-10)
-        play_again = tk.Button(root,main_font,bg='black', fg='white', text="Play again", command=play)
+        winner_label = tk.Label(root, textvariable=winner, font=("DejaVu Sans", 25, "normal"))
+        winner_label.place(x=position,y=position-spacing-spacing-20)
+        play_again = tk.Button(root,font=main_font,bg='black', fg='white', text="Play again", command=play)
         go_to_menu = tk.Button(root,font=main_font, bg='black',fg='white', text="Main menu", command=main_menu_fun)
         play_again.place(x=position,y=position-spacing)
         go_to_menu.place(x=position,y=position)
     elif result == "Draw":
         winner = tk.StringVar(value=f"That's a draw")
-        label = tk.Label(root, textvariable=winner, font=("DejaVu Sans", 20, "normal"))
-    
-def chceck_progress():#used to recreate the board after unpause
-    global board
-    if game_progress ==0:
-        board = [[None, None, None],
-                [None, None, None],
-                [None, None, None]]
+        winner_label = tk.Label(root, textvariable=winner, font=("DejaVu Sans", 20, "normal"))
+    return
+
+def chceck_progress():#used to recreate the game_board after unpause
+    global game_board
+    if game_progress == 1:
         play_field(y_res)
-    elif game_progress == 1:
+    else:
+        game_board = [[None, None, None],
+        [None, None, None],
+        [None, None, None]]
         play_field(y_res)
+    return
 
 def play_field(y_res):#create play field 
     #do not delete parameter it wont work without it 
-    global canvas, canvas_size,board
+    global canvas, canvas_size,game_board
     canvas_size = y_res-10
     canvas = tk.Canvas(root, width=canvas_size, height=canvas_size, bg="white")#creates canvas aka play field
     canvas.place(relx=0.5, rely=0.5, anchor='center')
@@ -399,6 +421,7 @@ def play_field(y_res):#create play field
         x2= canvas_size-10
         canvas.create_line(x1, y1, x2, y2, fill="white", width=1)
         play_field_buttons(y_res)
+        return
 
 def play_field_buttons(y_res):#SOMETHING IS LOOKING WRONG FIX IT!!!!!creates buttons in canvas
     global turn, bot_turns
@@ -407,15 +430,15 @@ def play_field_buttons(y_res):#SOMETHING IS LOOKING WRONG FIX IT!!!!!creates but
 
     #btn_row_colum
     global btn_1_1 ,btn_1_2 , btn_1_3, btn_2_1, btn_2_2, btn_2_3, btn_3_1, btn_3_2, btn_3_3
-    btn_1_1 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_1_1,1))
-    btn_1_2 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_1_2,2))
-    btn_1_3 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_1_3,3))
-    btn_2_1 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_2_1,4))
-    btn_2_2 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_2_2,5))
-    btn_2_3 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_2_3,6))
-    btn_3_1 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_3_1,7))
-    btn_3_2 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_3_2,8))
-    btn_3_3 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda: place_x_or_o(btn_3_3,9))
+    btn_1_1 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_1_1,1))
+    btn_1_2 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_1_2,2))
+    btn_1_3 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_1_3,3))
+    btn_2_1 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_2_1,4))
+    btn_2_2 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_2_2,5))
+    btn_2_3 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_2_3,6))
+    btn_3_1 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_3_1,7))
+    btn_3_2 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_3_2,8))
+    btn_3_3 = SquareButton(canvas, size=btn_size, bg='black' ,command=lambda:place_x_or_o(btn_3_3,9))
     y_res2 = y_res//3
     btn_1_1.place(x=1+(y_res2*0),y=1+(y_res2*0))
     btn_1_2.place(x=1+(y_res2*1),y=1+(y_res2*0))
@@ -432,6 +455,7 @@ def play_field_buttons(y_res):#SOMETHING IS LOOKING WRONG FIX IT!!!!!creates but
     bot_turns = []
     if difficulty == 1:
         whos_playing()
+    return
 
 def ez_bot_play():#TRY NOT TO USE PLAYER FIX IT!!! easy difficulty. it generates ints 1-9(counting starts from top left)
     global bot_turns
@@ -458,7 +482,7 @@ def ez_bot_play():#TRY NOT TO USE PLAYER FIX IT!!! easy difficulty. it generates
                         btn_3_2.invoke()
                     case 9:
                         btn_3_3.invoke()
-                break
+                return
             else:
                 continue
 def whos_playing():# try to fix it or implement it better
@@ -484,31 +508,31 @@ def place_x_or_o(position, witch_btn):
             position['state'] = tk.DISABLED
             match witch_btn:
                 case 1:
-                    board[0][0]=0
+                    game_board[0][0]=0
                     bot_turns.append(1)
                 case 2:
-                    board[0][1]=0
+                    game_board[0][1]=0
                     bot_turns.append(2)
                 case 3:
-                    board[0][2]=0
+                    game_board[0][2]=0
                     bot_turns.append(4)
                 case 4:
-                    board[1][0]=0
+                    game_board[1][0]=0
                     bot_turns.append(4)
                 case 5:
-                    board[1][1]=0
+                    game_board[1][1]=0
                     bot_turns.append(5)
                 case 6:
-                    board[1][2]=0
+                    game_board[1][2]=0
                     bot_turns.append(6)
                 case 7:
-                    board[2][0]=0
+                    game_board[2][0]=0
                     bot_turns.append(7)
                 case 8:
-                    board[2][1]=0
+                    game_board[2][1]=0
                     bot_turns.append(8)
                 case 9:
-                    board[2][2]=0
+                    game_board[2][2]=0
                     bot_turns.append(9)
         case 1:
             turn = 0
@@ -517,34 +541,35 @@ def place_x_or_o(position, witch_btn):
             position['state'] = tk.DISABLED
             match witch_btn:
                 case 1:
-                    board[0][0]=1
+                    game_board[0][0]=1
                     bot_turns.append(1)
                 case 2:
-                    board[0][1]=1
+                    game_board[0][1]=1
                     bot_turns.append(2)
                 case 3:
-                    board[0][2]=1
+                    game_board[0][2]=1
                     bot_turns.append(4)
                 case 4:
-                    board[1][0]=1
+                    game_board[1][0]=1
                     bot_turns.append(4)
                 case 5:
-                    board[1][1]=1
+                    game_board[1][1]=1
                     bot_turns.append(5)
                 case 6:
-                    board[1][2]=1
+                    game_board[1][2]=1
                     bot_turns.append(6)
                 case 7:
-                    board[2][0]=1
+                    game_board[2][0]=1
                     bot_turns.append(7)
                 case 8:
-                    board[2][1]=1
+                    game_board[2][1]=1
                     bot_turns.append(8)
                 case 9:
-                    board[2][2]=1
+                    game_board[2][2]=1
                     bot_turns.append(9)
     whos_playing()
-    winner(board)
+    winner(game_board)
+    return
 
 
 
@@ -570,4 +595,4 @@ root.mainloop()
 #add music https://www.geeksforgeeks.org/how-to-play-sounds-in-python-with-tkinter/
 
 #doesnt work
-minimax.idk_yet(board, player, opponent)
+#minimax.idk_yet(game_board, player, opponent)
