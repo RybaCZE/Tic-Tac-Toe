@@ -42,14 +42,6 @@ def check_win(board):
     # Else if none of them have won then return 0 
     return 0
 
-
-
-
-
-
-
-
-
 def minimax(board, depth,isMax):
     score = check_win(board)
     if (score == 10):
@@ -89,7 +81,6 @@ def best_move(board):
                 if (moveVal > bestVal) :                
                     bestMove = (row,col)
                     bestVal = moveVal
-                    print(bestVal)
                     return bestMove
 
 
@@ -98,9 +89,11 @@ def idk_yet(board, player_fun, opponent_fun):# 1/0
     player = player_fun
     opponent = opponent_fun
     move = best_move(board)
-
-    row = move[0]
-    col = move[1]
+    try:
+        row = move[0]
+        col = move[1]
+    except:
+        return
     match row:
         case 0:
             match col:
